@@ -9,5 +9,4 @@ router.delete('/:id', sauceCtrl.deleteSauce);
 router.get('/:id', sauceCtrl.getOneSauce);
 router.get('/', sauceCtrl.getAllSauces);
 
-
 module.exports = router;
