@@ -1,11 +1,15 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const path = require('path');
+const helmet = require('helmet');
+
+require('dotenv').config()
 
 const sauceRoutes = require('./routes/sauce');
 const userRoutes = require ('./routes/user');
 
-mongoose.connect('mongodb+srv://jordandev:jordan38@piiquante.0qvqa.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+mongoose.connect(process.env.SECRET_DB,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
@@ -21,6 +25,8 @@ app.use((req, res, next) => {
   });
 
 app.use(bodyParser.json());
+app.use(helmet());
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use('/api/sauces', sauceRoutes);
 app.use('/api/auth', userRoutes);
