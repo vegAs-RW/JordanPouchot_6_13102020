@@ -9,6 +9,7 @@ require('dotenv').config()
 const sauceRoutes = require('./routes/sauce');
 const userRoutes = require ('./routes/user');
 
+//Connexion a la base de l'application express a la base de donnée
 mongoose.connect(process.env.SECRET_DB,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
@@ -17,6 +18,7 @@ mongoose.connect(process.env.SECRET_DB,
 
 const app = express();
 
+//Modification des Headers pour les CORS
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -24,10 +26,14 @@ app.use((req, res, next) => {
     next();
   });
 
+// 
 app.use(bodyParser.json());
+// Package helmet dans l'application pour modifié les headers
 app.use(helmet());
+
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
+// Appel des routes de base de l'API
 app.use('/api/sauces', sauceRoutes);
 app.use('/api/auth', userRoutes);
 

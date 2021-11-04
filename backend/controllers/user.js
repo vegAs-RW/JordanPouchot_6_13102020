@@ -5,8 +5,9 @@ const jwt = require('jsonwebtoken');
 
 require('dotenv').config();
 
+// Enregistrement d'un nouvel utilisateur
 exports.signup = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10)
+    bcrypt.hash(req.body.password, 10) // On hash le mdp grace au package bcrypt
     .then(hash => {
         const user = new User ({
             email : req.body.email,
@@ -19,6 +20,7 @@ exports.signup = (req, res, next) => {
     .catch((error) => res.status(500).json ({ error }));
 };
 
+// Connexion d'un utilisateur existant
 exports.login = (req, res, next) => {
     User.findOne({ email : req.body.email})
     .then(user => {
@@ -32,7 +34,7 @@ exports.login = (req, res, next) => {
             }
             res.status(201).json({
                 userId: user._id,
-                token: jwt.sign(
+                token: jwt.sign( // On attribu un Token d'identification avec le package JWT
                     { userId: user._id },
                     process.env.SECRET_TOKEN,
                     { expiresIn: '24h' }
